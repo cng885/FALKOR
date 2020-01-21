@@ -1,4 +1,6 @@
 from .technical_indicators import sma, macd, obv, bollinger_bands, ema
+from iexfinance.stocks import get_historical_data   
+import os
 import warnings
 
 # Normalization Functions
@@ -6,6 +8,19 @@ def minmaxnorm(ser):
     """Takes a Pandas Series and returns the series with minmax normalization applied"""
     return (ser-ser.min())/(ser.max()-ser.min())
 
+def iex_historical_fetch(token, ticker, start, end):
+    """fetches historical data from iex api
+    
+    Arguments:
+        token {[type]} -- [description]
+        ticker {[type]} -- [description]
+        start {[type]} -- [description]
+        end {[type]} -- [description]
+        out_path {[type]} -- [description]
+    """
+    os.environ['IEX_TOKEN'] = token
+    data = get_historical_data(ticker, start, end, output_format='pandas')
+    return data
 
 def add_ti(df):
     """Take an input df of ochlv data and return a df ready for creating a chart image with"""
